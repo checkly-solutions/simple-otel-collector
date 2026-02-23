@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 60s
+  external_labels:
+    monitor: "checkly"
+
+scrape_configs:
+  - job_name: "checkly"
+    metrics_path: "/accounts/${CHECKLY_ACCOUNT_ID}/v2/prometheus/metrics"
+    bearer_token: "${CHECKLY_PROMETHEUS_BEARER_TOKEN}"
+    scheme: https
+    static_configs:
+      - targets: ["api.checklyhq.com"]
+
+remote_write:
+  - url: https://ingress.us2.coralogix.com/prometheus/v1
+    name: "NBCU"
+    remote_timeout: 120s
+    bearer_token: "${CORALOGIX_API_KEY}"
